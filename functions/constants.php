@@ -853,7 +853,7 @@ $setoptions = array(
 	       
 	      'galery_link_original'	  => array(
                   'type'    => 'bool',
-                  'title'   => __( 'Verlinke Galerybilder', 'fau' ),
+                  'title'   => __( 'Verlinke Galeriebilder', 'fau' ),
                   'label'   => __( 'Bei der Anzeige einer Defaultgalerie unter der Bildunterschrift eine Verlinkung auf das Originalbild einschalten', 'fau' ),                
                   'default' => $defaultoptions['galery_link_original'],
 		  'parent'  => 'design'
@@ -865,7 +865,7 @@ $setoptions = array(
 	       'advanced_page_sidebar_titleabove'	  => array(
                   'type'    => 'bool',
                   'title'   => __( 'Feld Titel oben', 'fau' ),
-                  'label'   => __( 'Fragt ein eigenes Titelfeld über den Texteditor zum text oben ab (Titel können allerdings auch im Editorfeld eingegeben werden)', 'fau' ),                
+                  'label'   => __( 'Fragt ein eigenes Titelfeld über den Texteditor zum Text oben ab (Titel können allerdings auch im Editorfeld eingegeben werden)', 'fau' ),                
                   'default' => $defaultoptions['advanced_page_sidebar_titleabove'],
 		  'parent'  => 'sidebaropt'
               ), 
