@@ -95,7 +95,7 @@ function fau_setup() {
 	add_image_size( 'page-thumb', $options['default_submenuthumb_width'], $options['default_submenuthumb_height'], true); // 220:110
 	
 	/* Thumb for Posts, displayed in post/page single display - Name: post */
-	add_image_size( 'post', $options['default_postthumb_width'], $options['default_postthumb_height'], $options['default_postthumb_crop']);
+	add_image_size( 'post', $options['default_thumb_width'], $options['default_thumb_height'], $options['default_thumb_crop'] );
 	
 	/* Thumb for person-type; small for sidebar - Name: person-thumb */
 	add_image_size( 'person-thumb', $options['default_person_thumb_width' ], $options['default_person_thumb_height'], $options['default_person_thumb_crop'	]); // 60, 80, true
@@ -1349,3 +1349,136 @@ function fau_wp_link_query_args( $query ) {
 }
 add_filter( 'wp_link_query_args', 'fau_wp_link_query_args' ); 
 
+
+
+
+
+ if ( ! function_exists( 'fau_get_person_index' ) ) :  
+    function fau_get_person_index($id=0) {
+     global $options;
+	$honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
+	$givenName = get_post_meta($id, 'fau_person_givenName', true);
+	$familyName = get_post_meta($id, 'fau_person_familyName', true);
+	$honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+	$jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
+	$telephone = get_post_meta($id, 'fau_person_telephone', true);
+	$email = get_post_meta($id, 'fau_person_email', true);
+	$worksFor = get_post_meta($id, 'fau_person_worksFor', true);
+        $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
+        $type = get_post_meta($id, 'fau_person_typ', true);
+
+	
+	$fullname = '';
+	if($honorificPrefix) 	$fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix.'</span> ';
+	if($givenName) 	$fullname .= '<span itemprop="givenName">'.$givenName.'</span> ';
+	if($familyName) 		$fullname .= '<span itemprop="familyName">'.$familyName.'</span>';
+	if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+	
+	if (empty($fullname)) {
+	    $fullname = get_the_title($id);
+	}
+     ?>
+     
+    <div class="person content-person" itemscope="" itemtype="http://schema.org/Person">
+	<div class="row">
+	    <div class="span1 span-small">		
+		<?php 
+		if (has_post_thumbnail()) {
+		    echo get_the_post_thumbnail($id, 'person-thumb-bigger'); 
+		} else {
+		    if ($type == 'realmale') {
+			$url = $options['plugin_fau_person_malethumb'];     
+		    } elseif ($type == 'realfemale') {
+			$url = $options['plugin_fau_person_femalethumb']; 
+		    } else {
+			$url = '';     
+		    }
+		    if ($url) {
+			echo '<img src="'.$url.'" width="90" height="120" alt="">';
+		    }
+		}
+		
+		?>
+	    </div>
+	    <div class="span3">
+		<h3><?php echo $fullname; ?></h3>
+		<ul class="person-info">
+		    <?php if ($jobTitle) { ?>
+		    <li class="person-info-position"><span class="screen-reader-text">Tätigkeit: </span><span itemprop="jobTitle"><?php echo $jobTitle; ?></span></li>
+		    <?php } ?>
+		     <?php if ($telephone) { ?>
+		    <li class="person-info-phone"><span class="screen-reader-text">Telefonnummer: </span><span itemprop="telephone"><?php echo $telephone; ?></span></li>
+		    <?php } ?>
+		
+		    <?php if ($email) { ?>
+		    <li class="person-info-email"><span class="screen-reader-text">E-Mail: </span><a itemprop="email" href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></li>
+		    <?php } ?>
+		</ul>
+	    </div>
+	    <div class="span3">
+		<div class="person-info-more"><a title="Weitere Informationen zu <?php echo $givenName; echo " ".$familyName;?> aufrufen" class="person-read-more" href="<?php the_permalink($id); ?>">Mehr ›</a></div>
+	    </div>
+	</div>
+    </div>
+    <?php 
+}
+endif;
+
+
+if ( ! function_exists( 'fau_comment' ) ) :
+/**
+ * Template for comments and pingbacks.
+ */
+function fau_comment( $comment, $args, $depth ) {
+        $GLOBALS['comment'] = $comment;
+        global $options;         
+        
+        switch ( $comment->comment_type ) :
+                case '' :
+        ?>
+        <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+          <div id="comment-<?php comment_ID(); ?>">
+            <article itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+              <header>  
+                <div class="comment-details">
+                    
+                <span class="comment-author vcard" itemprop="creator" itemscope itemtype="http://schema.org/Person">
+                    <?php if ($options['advanced_comments_avatar']) {
+                        echo '<div class="avatar" itemprop="image">';
+                        echo get_avatar( $comment, 48); 
+                        echo '</div>';   
+                    } 
+                    printf( __( '%s <span class="says">schrieb am</span>', 'fau' ), sprintf( '<cite class="fn" itemprop="name">%s</cite>', get_comment_author_link() ) ); 
+                    ?>
+                </span><!-- .comment-author .vcard -->
+              
+
+                <span class="comment-meta commentmetadata"><a itemprop="url" href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time itemprop="commentTime" datetime="<?php comment_time('c'); ?>">
+                    <?php
+                          /* translators: 1: date, 2: time */
+                       printf( __( '%1$s um %2$s Uhr', 'fau' ), get_comment_date(),  get_comment_time() ); ?></time></a> <?php echo __('folgendes','fau');?>:
+                  
+                </span><!-- .comment-meta .commentmetadata -->
+                </div>
+              </header>
+		     <?php if ( $comment->comment_approved == '0' ) : ?>
+                        <em><?php _e( 'Kommentar wartet auf Freischaltung.', 'fau' ); ?></em>
+                        <br />
+                <?php endif; ?>
+                <div class="comment-body" itemprop="commentText"><?php comment_text(); ?></div>
+		 <?php edit_comment_link( __( '(Bearbeiten)', 'fau' ), ' ' ); ?>
+            </article>
+          </div><!-- #comment-##  -->
+
+        <?php
+                        break;
+                case 'pingback'  :
+                case 'trackback' :
+        ?>
+        <li class="post pingback">
+                <p><?php _e( 'Pingback:', 'fau' ); ?> <?php comment_author_link(); edit_comment_link( __('Bearbeiten', 'fau'), ' ' ); ?></p>
+        <?php
+                        break;
+        endswitch;
+}
+endif;

@@ -932,7 +932,12 @@ function fau_do_metabox_page_sidebar( $object, $box ) {
 	    fau_form_text('sidebar_title_above', $sidebar_title_above, __('Titel oben','fau'), __('Titel am Anfang der Sidebar','fau'));
 	}
 	$sidebar_text_above = get_post_meta( $object->ID, 'sidebar_text_above', true );
- 	fau_form_wpeditor('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), __('Text am Anfang der Sidebar','fau'),true);
+	if ($options['advanced_page_sidebar_useeditor_textabove']) {
+	    fau_form_wpeditor('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), __('Text am Anfang der Sidebar','fau'),true);
+	} else {
+	    fau_form_textarea('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), $cols=50, $rows=5, __('Text am Anfang der Sidebar','fau')); 
+	}
+
    
 	if (($options['advanced_page_sidebar_linkblock1_number'] > 0) || ($options['advanced_page_sidebar_linkblock2_number'] > 0)) {
 	    // Frage nach Reihenfolge Linklisten vs Personen
@@ -1048,9 +1053,13 @@ function fau_do_metabox_page_sidebar( $object, $box ) {
 	    $sidebar_title_below = get_post_meta( $object->ID, 'sidebar_title_below', true );
 	    fau_form_text('sidebar_title_below', $sidebar_title_below, __('Titel unten','fau'), __('Titel am Ende der Sidebar','fau'));
 	}
-	$sidebar_text_below = get_post_meta( $object->ID, 'sidebar_text_below', true );
- 	fau_form_wpeditor('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), __('Text am Ende der Sidebar','fau'),true);	    
-	    
+ 
+	$sidebar_text_below = get_post_meta( $object->ID, 'sidebar_text_below', true );	
+	if ($options['advanced_page_sidebar_useeditor_textbelow']) {
+	    fau_form_wpeditor('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), __('Text am Ende der Sidebar','fau'),true);
+	} else {
+	    fau_form_textarea('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), $cols=50, $rows=5, __('Text am Ende der Sidebar','fau')); 
+	}		    
 	    
 
 	return;

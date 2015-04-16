@@ -161,6 +161,9 @@ $defaultoptions = array(
     
     'advanced_page_sidebar_titleabove'	=> true,
     'advanced_page_sidebar_titlebelow'	=> true,    
+    'advanced_page_sidebar_useeditor_textabove'	=> false,
+    'advanced_page_sidebar_useeditor_textbelow'	=> false,
+    
     'advanced_page_sidebar_personen_title'	=> __('Kontakt','fau'), 
     'advanced_page_sidebar_linkblock1_number'	=> 3, 
     'advanced_page_sidebar_linkblock2_number'	=> 3,
@@ -169,14 +172,26 @@ $defaultoptions = array(
     'advanced_page_sidebar_order_personlinks'	=> 0,
 	// 0 = Kontakte, Links
 	// 1 = Links, Kontakte
+    'advanced_activate_post_comments'	=> false,
+    'advanced_comments_notes_before'	    => __( 'Ihre E-Mail-Adresse wird nicht angezeigt. Verpflichtende Felder werden mit dem folgenden Zeichen markiert: <span class="required">*</span>', 'fau' ),
+    'advanced_comments_disclaimer'          => __('Hinweis: Die Kommentare wurden von Lesern geschrieben und spiegeln deren persönliche Meinung wieder. Sie müssen nicht die Meinung der Universität oder der Fakultät repräsentieren.', 'fau' ),
+    'advanced_comments_avatar'		    => false,
     
+
+
     'post_display_category_below'	=> true,
     'search_display_post_thumbnails'	=> true,
     'search_display_post_cats'		=> true,
     'search_display_continue_arrow'		=> true,
     'search_display_excerpt_morestring'		=> '...',
     
-
+    
+    'plugin_fau_person_headline'	=> true,
+    'plugin_fau_person_malethumb'	=> get_template_directory_uri().'/img/platzhalter-mann.png',
+    'plugin_fau_person_femalethumb'	=> get_template_directory_uri().'/img/platzhalter-frau.png',
+    
+    'index_synonym_listall'		=> true,
+    'index_glossary_listall'		=> true,
      
 ); 
 
