@@ -18,7 +18,8 @@ require_once( get_template_directory() . '/functions/custom-fields.php' );
 require_once( get_template_directory() . '/functions/posttype_imagelink.php' );
 require_once( get_template_directory() . '/functions/posttype_ad.php' );
 require_once( get_template_directory() . '/functions/widgets.php' );
-
+require_once( get_template_directory() . '/functions/posttype-synonym.php');
+require_once( get_template_directory() . '/functions/posttype-glossary.php');
 
 function fau_setup() {
 	global $options;
@@ -95,7 +96,7 @@ function fau_setup() {
 	add_image_size( 'page-thumb', $options['default_submenuthumb_width'], $options['default_submenuthumb_height'], true); // 220:110
 	
 	/* Thumb for Posts, displayed in post/page single display - Name: post */
-	add_image_size( 'post', $options['default_thumb_width'], $options['default_thumb_height'], $options['default_thumb_crop'] );
+	add_image_size( 'post', $options['default_post_width'], $options['default_post_height'], $options['default_post_crop'] ); // 300:200,false
 	
 	/* Thumb for person-type; small for sidebar - Name: person-thumb */
 	add_image_size( 'person-thumb', $options['default_person_thumb_width' ], $options['default_person_thumb_height'], $options['default_person_thumb_crop'	]); // 60, 80, true

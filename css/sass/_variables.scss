@@ -28,3 +28,4 @@ $colorHover: 	desaturate(lighten($colorPrimary, 10%), 40%);
 $colorLight:	desaturate(lighten($colorPrimary, 69%), 75%);
 $colorLightest:	desaturate(lighten($colorPrimary, 73%), 75%);
 
+$colorLightestContrast:	    $colorText;

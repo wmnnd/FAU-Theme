@@ -63,9 +63,9 @@ $defaultoptions = array(
     'default_postthumb_crop'	    => false,
    
      /* Thumb for Posts, displayed in post/page single display - Name: post */
-    'default_postthumb_width'	    => 300,
-    'default_postthumb_height'	    => 200,
-    'default_postthumb_crop'	    => false, 
+    'default_post_width'	    => 300,
+    'default_post_height'	    => 200,
+    'default_post_crop'	    => false, 
     
      /* Thumb for person-type; small for sidebar - Name: person-thumb */
     'default_person_thumb_width'    => 60,
@@ -891,6 +891,25 @@ $setoptions = array(
                   'default' => $defaultoptions['advanced_page_sidebar_titlebelow'],
 		  'parent'  => 'sidebaropt'
               ), 
+	       
+	        'advanced_page_sidebar_useeditor_textabove'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'WYSIWYG-Editor Text unten', 'fau' ),
+                  'label'   => __( 'Erlaubt die Nutzung des WYSWYG-Editors für die Eingabe von Text in der Sitebar. Dies schließt auch HTML-Tags mit Bildern und Links ein. Andernfalls ist nur ein Text mit Absätzen möglich.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_page_sidebar_useeditor_textabove'],
+		  'parent'  => 'sidebaropt'
+              ), 
+	    'advanced_page_sidebar_useeditor_textbelow'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'WYSIWYG-Editor Text unten', 'fau' ),
+                  'label'   => __('Erlaubt die Nutzung des WYSWYG-Editors für die Eingabe von Text in der Sitebar. Dies schließt auch HTML-Tags mit Bildern und Links ein. Andernfalls ist nur ein Text mit Absätzen möglich.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_page_sidebar_useeditor_textbelow'],
+		  'parent'  => 'sidebaropt'
+              ), 
+	       
+	       
+	       
+	       
 		'advanced_page_sidebar_personen_title'	  => array(
                   'type'    => 'text',
                   'title'   => __( 'Default Titel über Kontakte', 'fau' ),
@@ -930,7 +949,35 @@ $setoptions = array(
 	       
 
 
+	'kommentare'  => array(
+                  'type'    => 'section',
+                  'title'   => __( 'Kommentare', 'fau' ),                      
+		),
+	       'advanced_activate_post_comments'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Kommentarfunktion aktivieren', 'fau' ),
+                  'label'   => __( 'Schaltet die Kommentarfunktion für Beiträge ein.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_activate_post_comments'],
+		  'parent'  => 'kommentare'
+		), 
+	        'advanced_comments_notes_before'	  => array(
+                  'type'    => 'text',
+                  'title'   => __( 'Hinweistext Eingabeformular', 'fau' ),
+                  'label'   => __( 'Informationen über den Eingabefeldern für neue Kommentare.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_comments_notes_before'],
+		  'parent'  => 'kommentare'
+		), 
+	        'advanced_comments_disclaimer'	  => array(
+                  'type'    => 'text',
+                  'title'   => __( 'Kommentar-Disclaimer', 'fau' ),
+                  'label'   => __( 'Hinweistext zur Abgrenzung zum Inhalt der Kommentare.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_comments_disclaimer'],
+		  'parent'  => 'kommentare'
+		), 
 	       
+  
+	       
+	       	       
 	       
 	       
 	       

@@ -25,7 +25,7 @@ get_header();
 
                 <div class="breadcrumbs">
                     <a href="<?php echo esc_url(home_url('/')); ?>"><?php echo $options['breadcrumb_root']; ?></a><span>/</span>
-                    <?php bcn_display(); ?>
+                    <?php fau_breadcrumb(); ?>
                 </div>
             </div>
         </div>

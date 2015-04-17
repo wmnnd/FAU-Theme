@@ -39,10 +39,10 @@ get_header();
 		
 			<div class="row">
 				<div class="span6">
-					<h2>
+					<p class="hinweis">
 						<strong><?php _e('Es tut uns leid.','fau'); ?></strong><br>
-						<?php _e('Die von Ihnen aufgerufene Seite existiert nicht oder ihre Adresse hat sich durch die Erneuerung der FAU-Webseiten geändert.','fau'); ?>
-					</h2>
+						<?php _e('Die von Ihnen aufgerufene Seite existiert nicht oder ihre Adresse hat sich durch Änderungen der Seiten geändert.','fau'); ?>
+					</p>
 					<div class="row">
 						<div class="span4 offset2"><img src="<?php echo fau_get_template_uri(); ?>/img/friedrich-alexander.gif" alt="" class="error-404-persons"></div>
 					</div>
