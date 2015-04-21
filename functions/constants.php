@@ -153,6 +153,8 @@ $defaultoptions = array(
     'title_hero_search'		    =>  __( 'Suche', 'fau' ),
     'title_hero_events'		    =>  __( 'Veranstaltungskalender','fau'),
     
+    'advanced_post_active_subtitle'	=> true,
+  
     'advanced_beitragsoptionen'		=> true,
     'advanced_topevent'			=> true,
     'advanced_activateads'		=> true,
@@ -860,6 +862,16 @@ $setoptions = array(
               ),   
 	       
 	       
+	      'advanced_post_active_subtitle'	=> array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Untertitel (Beiträge)', 'fau' ),
+                  'label'   => __( 'Erlaube die Eingabe von Untertitel bei Beiträgen.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_post_active_subtitle'],
+		  'parent'  => 'bedienung'
+              ),   
+	       
+	       
+	       
 	       
 	      'design'  => array(
                   'type'    => 'section',
@@ -947,8 +959,6 @@ $setoptions = array(
 		  'parent'  => 'sidebaropt'
 		), 
 	       
-
-
 	'kommentare'  => array(
                   'type'    => 'section',
                   'title'   => __( 'Kommentare', 'fau' ),                      

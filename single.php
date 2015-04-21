@@ -22,7 +22,15 @@ get_header(); ?>
 				<div class="span8">
 					
 					<article class="news-details">
-						<?php if ( has_post_thumbnail() && ! post_password_required() ) : ?>
+						<?php 
+						
+						$headline = get_post_meta( $post->ID, 'fauval_untertitel', true );				
+						if ( $headline) {
+						    echo '<h2 class="subtitle">'.$headline."</h2>\n";
+						}
+						
+						
+						if ( has_post_thumbnail() && ! post_password_required() ) : ?>
 							<div class="post-image">
 								<?php 
 								$bildunterschrift = get_post_meta( $post->ID, 'fauval_overwrite_thumbdesc', true );
