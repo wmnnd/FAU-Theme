@@ -33,7 +33,10 @@ get_header(); ?>
 			?>
 		</div>
 		<div class="span4">
-		    <?php get_template_part('sidebar'); ?>
+		    <?php get_template_part('sidebar');
+		    
+		 
+		    ?>
 		</div>
 	    </div>
 		
