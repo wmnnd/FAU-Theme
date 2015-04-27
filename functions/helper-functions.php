@@ -386,7 +386,7 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 	    echo "<p>\n";
 	    echo '<label for="title_'.$rand.'_'.$name.'">'.__('Titel','fau');   
 	    echo "</label><br />\n";
-	    echo '<input type="text" class="large-text" name="'.$name.'_title" id="title_'.$rand.'_'.$name.'" value="'.$pretitle.'">';
+	    echo '<input type="text" class="large-text" name="'.$name.'_title" id="title_'.$rand.'_'.$name.'" value="'.$pretitle.'" placeholder="'.__('Nutze Titel der verlinkten Seite','fau').'">';
 	    echo "</p>\n";	    
 	    echo "<p>\n";
 	    echo '<label for="url_'.$rand.'_'.$name.'">'.__('URL','fau');  
@@ -397,15 +397,20 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 	    echo "</div>\n";
 	   
 	    ?>
-	   <script>
+	   <script>	
+	
 		var _link_sideload = false; 
 		var link_btn_<?php echo $name?> = (function($){
-		    var _link_sideload = false; 
+	 		    
+		    var link_sideload = false; 
+		    var link_val_container = $('#url_<?php echo $rand ?>_<?php echo $name ?>');
+		    var title_val_container = $('#title_<?php echo $rand ?>_<?php echo $name ?>');
+		    
 		    function _init() {
 			$('.link_button_<?php echo $name ?>').on('click', function (event) {
                             _addLinkListeners();
                             _link_sideload = false;
-                            var link_val_container = $('#url_<?php echo $rand ?>_<?php echo $name ?>');
+                            
                           
                             if ( typeof wpActiveEditor != 'undefined') {
                                 wpLink.open();
@@ -424,6 +429,8 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			    var linkAtts = wpLink.getAttrs();
 			    $('#url_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.href);
 			    $('#title_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.title);
+			   
+			    alert(linkAtts.toSource());
 			    _removeLinkListeners();
 			    return false;
 			});
@@ -433,6 +440,8 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			});
 		    }
 
+
+
 		    function _removeLinkListeners() {
 			if(_link_sideload){
 			    if ( typeof wpActiveEditor != 'undefined') {
@@ -441,6 +450,7 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			}
 			wpLink.close();
 			wpLink.textarea = $('html');//focus on document
+			title_val_container.focus();
 			$('body').off('click', '#wp-link-submit');
 			$('body').off('click', '#wp-link-cancel');
 		    }
@@ -449,21 +459,51 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 		    };
 		    })(jQuery);
 	   
-	    jQuery(document).ready(function($) {	 
+	    jQuery(document).ready(function($) {
+	   
 		 link_btn_<?php echo $name?>.init();
 	    });
 	  
 	   </script> 		    	    
-	   <?php 
-        
+	   <?php   
 	 echo "</div>\n";
 	
+	add_action( 'admin_footer-post-new.php', 'fau_wpLinkUpdate_getAttr', 9999 );
+	add_action( 'admin_footer-post.php',     'fau_wpLinkUpdate_getAttr', 9999 );
+	 
 	} else {
 	    echo _('Ungültiger Aufruf von fau_form_link() - Name oder Label fehlt.', 'fau');
 	}
     }
  endif;
+if ( ! function_exists( 'fau_wpLinkUpdate_getAttr' ) ) :  
+
+function fau_wpLinkUpdate_getAttr() {
+     ?>
+    <script type="text/javascript">
+        ( function( $ ) {
+            var  inputs = {};
+	    
+            if ( typeof wpLink == 'undefined' )
+                return;
+
+            // Override the function
+            wpLink.getAttrs= function () { 
+		inputs.url = $( '#wp-link-url' );
+		inputs.text = $( '#wp-link-text' );
+		inputs.openInNewTab = $( '#wp-link-target' );
+		return {
+    		    title: $.trim( inputs.text.val() ),
+                    href: $.trim( inputs.url.val() ),
+                    target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : ''
+               };
+            };
+        } )( jQuery );
+    </script>
+   <?php
+}
     
+endif;    
 
 if ( ! function_exists( 'fau_save_standard' ) ) :  
     function fau_save_standard($name, $val, $post_id, $post_type, $type='text') {
