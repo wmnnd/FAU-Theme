@@ -430,7 +430,6 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			    $('#url_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.href);
 			    $('#title_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.title);
 			   
-			    alert(linkAtts.toSource());
 			    _removeLinkListeners();
 			    return false;
 			});
