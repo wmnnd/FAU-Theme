@@ -111,7 +111,7 @@ function imagelink_restrict_manage_posts() {
 add_action( 'restrict_manage_posts', 'imagelink_restrict_manage_posts' );
 
 
-
+/* 
 function imagelink_post_types_admin_order( $wp_query ) {
 	if (is_admin()) {
 
@@ -129,7 +129,7 @@ function imagelink_post_types_admin_order( $wp_query ) {
 	}
 }
 add_filter('pre_get_posts', 'imagelink_post_types_admin_order');
-
+*/
 
 
 function fau_imagelink_metabox() {

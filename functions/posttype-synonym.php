@@ -100,8 +100,8 @@ function synonym_restrict_manage_posts() {
 endif;
 add_action( 'restrict_manage_posts', 'synonym_restrict_manage_posts' );
 
+/*
 if ( ! function_exists( 'synonym_post_types_admin_order' ) ) :
-
 function synonym_post_types_admin_order( $wp_query ) {
 	if (is_admin()) {
 
@@ -120,7 +120,7 @@ function synonym_post_types_admin_order( $wp_query ) {
 }
 endif;
 add_filter('pre_get_posts', 'synonym_post_types_admin_order');
-
+*/
 
 
 if ( ! function_exists( 'fau_synonym_metabox' ) ) :

@@ -1309,6 +1309,13 @@ ul.tagcloud {
 	.default .accordion-heading .accordion-toggle {
 		border-color: $colorDefault;
 	}
+	.content-person {
+	    padding: 5px 0 10px 0;
+	    border: none;
+	    h1, h2, h3 {
+		color: $colorText;
+	    }
+	}
 }
 
 
