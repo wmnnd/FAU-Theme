@@ -168,8 +168,6 @@ function fau_register_scripts() {
     wp_register_script( 'fau-libs-jquery-flexslider', get_fau_template_uri() . '/js/libs/jquery.flexslider.js', array('jquery'), $options['js-version'], true );
 	// Flexslider für Startseite und für Galerien.  
     wp_register_script( 'fau-libs-jquery-hoverintent', get_fau_template_uri() . '/js/libs/jquery.hoverintent.js', array(), $options['js-version'], true );
-//	wp_register_script( 'fau-libs-jquery-fluidbox', get_fau_template_uri() . '/js/libs/jquery.fluidbox.js', array(), $options['js-version'], true );
-	// wird nirgends verwendet
     wp_register_script( 'fau-libs-jquery-fancybox', get_fau_template_uri() . '/js/libs/jquery.fancybox.js', array('jquery'), $options['js-version'], true );  
 	// Fuer bessere Lightboxen
     wp_register_script( 'fau-libs-jquery-caroufredsel', get_fau_template_uri() . '/js/libs/jquery.caroufredsel.js', array('jquery'), $options['js-version'], true );
@@ -195,10 +193,6 @@ function fau_basescripts_styles() {
 
     wp_enqueue_script('fau-libs-jquery-hoverintent');
 	// wird für die Navigationen mit <nav> verwendet
-
-     // wp_enqueue_script('fau-libs-jquery-fluidbox');
-	// macht eine ALternative zu lightbox. http://terrymun.github.io/Fluidbox/ 
-	// Wird nicht verwendet?
 
     wp_enqueue_script('fau-libs-jquery-fancybox');
 	// wird für Bilder verwendet, die mit Lightbox vergrößert werden,
@@ -461,8 +455,7 @@ function custom_error_pages()
     }
 }
  
-function custom_error_title($title='',$sep='')
-{
+function custom_error_title($title='',$sep='') {
     if(isset($_REQUEST['status']) && $_REQUEST['status'] == 403)
         return "Forbidden ".$sep." ".get_bloginfo('name');
  

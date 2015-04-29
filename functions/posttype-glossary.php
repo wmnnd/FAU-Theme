@@ -117,7 +117,7 @@ function glossary_restrict_manage_posts() {
 endif;
 add_action( 'restrict_manage_posts', 'glossary_restrict_manage_posts' );
 
-/*
+
 if ( ! function_exists( 'glossary_post_types_admin_order' ) ) :
 function glossary_post_types_admin_order( $wp_query ) {
 	if (is_admin()) {
@@ -137,7 +137,7 @@ function glossary_post_types_admin_order( $wp_query ) {
 }
 endif;
 add_filter('pre_get_posts', 'glossary_post_types_admin_order');
-*/
+
 
 /* Moving old ACF-Field "description" to normal content, if still in use */
 if ( ! function_exists( 'prefill_desc_byoldversion' ) ) :
