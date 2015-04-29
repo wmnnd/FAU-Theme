@@ -46,7 +46,11 @@ get_header(); ?>
 				<div class="span8 span-sm-8">
 					<?php 
 					$headline = get_post_meta( $post->ID, 'headline', true );									
-					if ($headline) { echo '<h2>'.$headline.'</h2>'; }
+					if ($headline) { 
+					    echo '<h2>'.$headline.'</h2>'; 
+					} else {
+					    echo '<div class="page-nosubtitle">&nbsp;</div>';					    
+					}
 
 
 					get_template_part('sidebar', 'inline'); 
