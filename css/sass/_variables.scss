@@ -21,6 +21,7 @@ $colorMedFak: 	#00b1c6;
 $colorNatFak:	#009775;
 $colorTechFak:	#a3acb2;
 $colorZUV:		#003366;
+$colorDefault:	$colorZUV;
 
 // Define primary colors by faculty
 $colorPrimary:	$colorZUV;
@@ -28,3 +29,4 @@ $colorHover: 	desaturate(lighten($colorPrimary, 10%), 40%);
 $colorLight:	desaturate(lighten($colorPrimary, 69%), 75%);
 $colorLightest:	desaturate(lighten($colorPrimary, 73%), 75%);
 
+$colorLightestContrast:	    $colorText;

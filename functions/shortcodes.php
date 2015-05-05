@@ -152,15 +152,13 @@ class FAUShortcodes {
 						
 						$subpages = get_pages(array('sort_order' => 'ASC', 'sort_column' => 'menu_order', 'parent' => $page->ID, 'hierarchical' => 0));
 						
-						if(count($subpages) > 0)
-						{
+						if(count($subpages) > 0){
 							$return .= '<div class="assistant-tabs">';
 
 								$return .= '<ul class="assistant-tabs-nav">';
 
 								$j = 0;
-								foreach($subpages as $subpage)
-								{
+								foreach($subpages as $subpage) {
 									if($j == 0) $class = 'active';
 									else $class = '';
 

@@ -18,7 +18,8 @@ require_once( get_template_directory() . '/functions/custom-fields.php' );
 require_once( get_template_directory() . '/functions/posttype_imagelink.php' );
 require_once( get_template_directory() . '/functions/posttype_ad.php' );
 require_once( get_template_directory() . '/functions/widgets.php' );
-
+require_once( get_template_directory() . '/functions/posttype-synonym.php');
+require_once( get_template_directory() . '/functions/posttype-glossary.php');
 
 function fau_setup() {
 	global $options;
@@ -95,7 +96,7 @@ function fau_setup() {
 	add_image_size( 'page-thumb', $options['default_submenuthumb_width'], $options['default_submenuthumb_height'], true); // 220:110
 	
 	/* Thumb for Posts, displayed in post/page single display - Name: post */
-	add_image_size( 'post', $options['default_postthumb_width'], $options['default_postthumb_height'], $options['default_postthumb_crop']);
+	add_image_size( 'post', $options['default_post_width'], $options['default_post_height'], $options['default_post_crop'] ); // 300:200,false
 	
 	/* Thumb for person-type; small for sidebar - Name: person-thumb */
 	add_image_size( 'person-thumb', $options['default_person_thumb_width' ], $options['default_person_thumb_height'], $options['default_person_thumb_crop'	]); // 60, 80, true
@@ -167,8 +168,6 @@ function fau_register_scripts() {
     wp_register_script( 'fau-libs-jquery-flexslider', get_fau_template_uri() . '/js/libs/jquery.flexslider.js', array('jquery'), $options['js-version'], true );
 	// Flexslider für Startseite und für Galerien.  
     wp_register_script( 'fau-libs-jquery-hoverintent', get_fau_template_uri() . '/js/libs/jquery.hoverintent.js', array(), $options['js-version'], true );
-//	wp_register_script( 'fau-libs-jquery-fluidbox', get_fau_template_uri() . '/js/libs/jquery.fluidbox.js', array(), $options['js-version'], true );
-	// wird nirgends verwendet
     wp_register_script( 'fau-libs-jquery-fancybox', get_fau_template_uri() . '/js/libs/jquery.fancybox.js', array('jquery'), $options['js-version'], true );  
 	// Fuer bessere Lightboxen
     wp_register_script( 'fau-libs-jquery-caroufredsel', get_fau_template_uri() . '/js/libs/jquery.caroufredsel.js', array('jquery'), $options['js-version'], true );
@@ -194,10 +193,6 @@ function fau_basescripts_styles() {
 
     wp_enqueue_script('fau-libs-jquery-hoverintent');
 	// wird für die Navigationen mit <nav> verwendet
-
-     // wp_enqueue_script('fau-libs-jquery-fluidbox');
-	// macht eine ALternative zu lightbox. http://terrymun.github.io/Fluidbox/ 
-	// Wird nicht verwendet?
 
     wp_enqueue_script('fau-libs-jquery-fancybox');
 	// wird für Bilder verwendet, die mit Lightbox vergrößert werden,
@@ -460,8 +455,7 @@ function custom_error_pages()
     }
 }
  
-function custom_error_title($title='',$sep='')
-{
+function custom_error_title($title='',$sep='') {
     if(isset($_REQUEST['status']) && $_REQUEST['status'] == 403)
         return "Forbidden ".$sep." ".get_bloginfo('name');
  
@@ -486,56 +480,6 @@ function custom_error_class($classes)
  
 add_action('wp','custom_error_pages');
 
-
-add_action( 'contextual_help', 'wptuts_screen_help', 10, 3 );
-function wptuts_screen_help( $contextual_help, $screen_id, $screen ) {
- 
-    // The add_help_tab function for screen was introduced in WordPress 3.3.
-    if ( ! method_exists( $screen, 'add_help_tab' ) )
-        return $contextual_help;
- 
-    global $hook_suffix;
- 
-    // List screen properties
-    $variables = '<ul style="width:50%;float:left;"> <strong>Screen variables </strong>'
-        . sprintf( '<li> Screen id : %s</li>', $screen_id )
-        . sprintf( '<li> Screen base : %s</li>', $screen->base )
-        . sprintf( '<li>Parent base : %s</li>', $screen->parent_base )
-        . sprintf( '<li> Parent file : %s</li>', $screen->parent_file )
-        . sprintf( '<li> Hook suffix : %s</li>', $hook_suffix )
-        . '</ul>';
- 
-    // Append global $hook_suffix to the hook stems
-    $hooks = array(
-        "load-$hook_suffix",
-        "admin_print_styles-$hook_suffix",
-        "admin_print_scripts-$hook_suffix",
-        "admin_head-$hook_suffix",
-        "admin_footer-$hook_suffix"
-    );
- 
-    // If add_meta_boxes or add_meta_boxes_{screen_id} is used, list these too
-    if ( did_action( 'add_meta_boxes_' . $screen_id ) )
-        $hooks[] = 'add_meta_boxes_' . $screen_id;
- 
-    if ( did_action( 'add_meta_boxes' ) )
-        $hooks[] = 'add_meta_boxes';
- 
-    // Get List HTML for the hooks
-    $hooks = '<ul style="width:50%;float:left;"> <strong>Hooks </strong> <li>' . implode( '</li><li>', $hooks ) . '</li></ul>';
- 
-    // Combine $variables list with $hooks list.
-    $help_content = $variables . $hooks;
- 
-    // Add help panel
-    $screen->add_help_tab( array(
-        'id'      => 'wptuts-screen-help',
-        'title'   => 'Screen Information',
-        'content' => $help_content,
-    ));
- 
-    return $contextual_help;
-}
 
 
 add_filter('post_gallery', 'fau_post_gallery', 10, 2);
@@ -1349,3 +1293,136 @@ function fau_wp_link_query_args( $query ) {
 }
 add_filter( 'wp_link_query_args', 'fau_wp_link_query_args' ); 
 
+
+
+
+
+ if ( ! function_exists( 'fau_get_person_index' ) ) :  
+    function fau_get_person_index($id=0) {
+     global $options;
+	$honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
+	$givenName = get_post_meta($id, 'fau_person_givenName', true);
+	$familyName = get_post_meta($id, 'fau_person_familyName', true);
+	$honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+	$jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
+	$telephone = get_post_meta($id, 'fau_person_telephone', true);
+	$email = get_post_meta($id, 'fau_person_email', true);
+	$worksFor = get_post_meta($id, 'fau_person_worksFor', true);
+        $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
+        $type = get_post_meta($id, 'fau_person_typ', true);
+
+	
+	$fullname = '';
+	if($honorificPrefix) 	$fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix.'</span> ';
+	if($givenName) 	$fullname .= '<span itemprop="givenName">'.$givenName.'</span> ';
+	if($familyName) 		$fullname .= '<span itemprop="familyName">'.$familyName.'</span>';
+	if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+	
+	if (empty($fullname)) {
+	    $fullname = get_the_title($id);
+	}
+     ?>
+     
+    <div class="person content-person" itemscope="" itemtype="http://schema.org/Person">
+	<div class="row">
+	    <div class="span1 span-small">		
+		<?php 
+		if (has_post_thumbnail()) {
+		    echo get_the_post_thumbnail($id, 'person-thumb-bigger'); 
+		} else {
+		    if ($type == 'realmale') {
+			$url = $options['plugin_fau_person_malethumb'];     
+		    } elseif ($type == 'realfemale') {
+			$url = $options['plugin_fau_person_femalethumb']; 
+		    } else {
+			$url = '';     
+		    }
+		    if ($url) {
+			echo '<img src="'.$url.'" width="90" height="120" alt="">';
+		    }
+		}
+		
+		?>
+	    </div>
+	    <div class="span3">
+		<h3><?php echo $fullname; ?></h3>
+		<ul class="person-info">
+		    <?php if ($jobTitle) { ?>
+		    <li class="person-info-position"><span class="screen-reader-text">Tätigkeit: </span><span itemprop="jobTitle"><?php echo $jobTitle; ?></span></li>
+		    <?php } ?>
+		     <?php if ($telephone) { ?>
+		    <li class="person-info-phone"><span class="screen-reader-text">Telefonnummer: </span><span itemprop="telephone"><?php echo $telephone; ?></span></li>
+		    <?php } ?>
+		
+		    <?php if ($email) { ?>
+		    <li class="person-info-email"><span class="screen-reader-text">E-Mail: </span><a itemprop="email" href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></li>
+		    <?php } ?>
+		</ul>
+	    </div>
+	    <div class="span3">
+		<div class="person-info-more"><a title="Weitere Informationen zu <?php echo $givenName; echo " ".$familyName;?> aufrufen" class="person-read-more" href="<?php the_permalink($id); ?>">Mehr ›</a></div>
+	    </div>
+	</div>
+    </div>
+    <?php 
+}
+endif;
+
+
+if ( ! function_exists( 'fau_comment' ) ) :
+/**
+ * Template for comments and pingbacks.
+ */
+function fau_comment( $comment, $args, $depth ) {
+        $GLOBALS['comment'] = $comment;
+        global $options;         
+        
+        switch ( $comment->comment_type ) :
+                case '' :
+        ?>
+        <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+          <div id="comment-<?php comment_ID(); ?>">
+            <article itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+              <header>  
+                <div class="comment-details">
+                    
+                <span class="comment-author vcard" itemprop="creator" itemscope itemtype="http://schema.org/Person">
+                    <?php if ($options['advanced_comments_avatar']) {
+                        echo '<div class="avatar" itemprop="image">';
+                        echo get_avatar( $comment, 48); 
+                        echo '</div>';   
+                    } 
+                    printf( __( '%s <span class="says">schrieb am</span>', 'fau' ), sprintf( '<cite class="fn" itemprop="name">%s</cite>', get_comment_author_link() ) ); 
+                    ?>
+                </span><!-- .comment-author .vcard -->
+              
+
+                <span class="comment-meta commentmetadata"><a itemprop="url" href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time itemprop="commentTime" datetime="<?php comment_time('c'); ?>">
+                    <?php
+                          /* translators: 1: date, 2: time */
+                       printf( __( '%1$s um %2$s Uhr', 'fau' ), get_comment_date(),  get_comment_time() ); ?></time></a> <?php echo __('folgendes','fau');?>:
+                  
+                </span><!-- .comment-meta .commentmetadata -->
+                </div>
+              </header>
+		     <?php if ( $comment->comment_approved == '0' ) : ?>
+                        <em><?php _e( 'Kommentar wartet auf Freischaltung.', 'fau' ); ?></em>
+                        <br />
+                <?php endif; ?>
+                <div class="comment-body" itemprop="commentText"><?php comment_text(); ?></div>
+		 <?php edit_comment_link( __( '(Bearbeiten)', 'fau' ), ' ' ); ?>
+            </article>
+          </div><!-- #comment-##  -->
+
+        <?php
+                        break;
+                case 'pingback'  :
+                case 'trackback' :
+        ?>
+        <li class="post pingback">
+                <p><?php _e( 'Pingback:', 'fau' ); ?> <?php comment_author_link(); edit_comment_link( __('Bearbeiten', 'fau'), ' ' ); ?></p>
+        <?php
+                        break;
+        endswitch;
+}
+endif;

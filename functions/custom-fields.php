@@ -19,7 +19,7 @@ function fau_metabox_cf_setup() {
 
 
 	/* Save sidecontent */
-	add_action( 'save_post', 'fau_save_metabox_page_untertitel', 10, 2 );
+	add_action( 'save_post', 'fau_save_metabox_page_untertitel', 10, 2 );	
 	add_action( 'save_post', 'fau_save_metabox_page_subnavmenu', 10, 2 );
 	
 	
@@ -27,7 +27,10 @@ function fau_metabox_cf_setup() {
 	add_action( 'save_post', 'fau_save_metabox_page_imagelinks', 10, 2 );
 	
 	add_action( 'save_post', 'fau_save_metabox_page_sidebar', 10, 2 );
-	
+
+	if ($options['advanced_post_active_subtitle']==true) {
+	    add_action( 'save_post', 'fau_save_metabox_post_untertitel', 10, 2 );
+	}	
 	if ($options['advanced_activateads'] == true) {
 	    add_action( 'save_post', 'fau_save_metabox_page_ad', 10, 2 );
 	}
@@ -97,6 +100,14 @@ function fau_add_metabox_post() {
 		'fau_do_metabox_post_teaser',		
 		 'post','normal','high'
 	);
+	if ($options['advanced_post_active_subtitle']==true) {
+	    add_meta_box(
+		   'fau_metabox_post_untertitel',			
+		    esc_html__( 'Untertitel', 'fau' ),		
+		    'fau_do_metabox_post_untertitel',	
+		     'post','normal','high'
+	    );
+	}
 	if ($options['advanced_topevent']==true) {
 	    add_meta_box(
 		    'fau_metabox_post_topevent',			
@@ -508,6 +519,48 @@ function fau_save_metabox_page_subnavmenu( $post_id, $post ) {
 
 
 
+/* Display Options for menuquotes on pages */
+function fau_do_metabox_post_untertitel( $object, $box ) { 
+	wp_nonce_field( basename( __FILE__ ), 'fau_metabox_post_untertitel_nonce' ); 
+	$post_type = get_post_type( $object->ID); 
+	
+	if ( !current_user_can( 'edit_post', $object->ID) )
+	    return;
+	
+	
+	$untertitel  = get_post_meta( $object->ID, 'fauval_untertitel', true );	
+	fau_form_text('fau_metabox_post_untertitel', $untertitel, __('Untertitel (Inhaltsüberschrift)','fau'), __('Dieser Untertitel erscheint im Inhaltsbereich, unterhalb des Balkens mit dem eigentlichen Titel.','fau'));
+
+ }
+
+/* Save the meta box's post/page metadata. */
+function fau_save_metabox_post_untertitel( $post_id, $post ) {
+	/* Verify the nonce before proceeding. */
+	if ( !isset( $_POST['fau_metabox_post_untertitel_nonce'] ) || !wp_verify_nonce( $_POST['fau_metabox_post_untertitel_nonce'], basename( __FILE__ ) ) )
+		return $post_id;
+
+
+	/* Check if the current user has permission to edit the post. */
+	if ( !current_user_can( 'edit_post', $post_id ) )
+		return;
+	
+
+	$newval = ( isset( $_POST['fau_metabox_post_untertitel'] ) ? sanitize_text_field( $_POST['fau_metabox_post_untertitel'] ) : 0 );
+	$oldval = get_post_meta( $post_id, 'fauval_untertitel', true );
+	
+	if (!empty(trim($newval))) {
+	    if (isset($oldval)  && ($oldval != $newval)) {
+		update_post_meta( $post_id, 'fauval_untertitel', $newval );
+	    } else {
+		add_post_meta( $post_id, 'fauval_untertitel', $newval, true );
+	    }
+	} elseif ($oldval) {
+	    delete_post_meta( $post_id, 'fauval_untertitel', $oldval );	
+	} 
+}
+
+
+
 
 /* Display Options for menuquotes on pages */
 function fau_do_metabox_page_untertitel( $object, $box ) { 
@@ -590,7 +643,7 @@ function fau_do_metabox_page_portalmenu( $object, $box ) {
 	    if (!isset($thisterm)) {
 		$thisterm = get_term_by('slug', $currentmenu, 'nav_menu');
 	    }
-	    if (isset($thisterm)) {
+	    if ($thisterm !==false) {
 		$currentmenuid = $thisterm->term_id;    
 	    }
 	}
@@ -932,7 +985,12 @@ function fau_do_metabox_page_sidebar( $object, $box ) {
 	    fau_form_text('sidebar_title_above', $sidebar_title_above, __('Titel oben','fau'), __('Titel am Anfang der Sidebar','fau'));
 	}
 	$sidebar_text_above = get_post_meta( $object->ID, 'sidebar_text_above', true );
- 	fau_form_wpeditor('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), __('Text am Anfang der Sidebar','fau'),true);
+	if ($options['advanced_page_sidebar_useeditor_textabove']) {
+	    fau_form_wpeditor('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), __('Text am Anfang der Sidebar','fau'),true);
+	} else {
+	    fau_form_textarea('sidebar_text_above', $sidebar_text_above, __('Textbereich oben','fau'), $cols=50, $rows=5, __('Text am Anfang der Sidebar','fau')); 
+	}
+
    
 	if (($options['advanced_page_sidebar_linkblock1_number'] > 0) || ($options['advanced_page_sidebar_linkblock2_number'] > 0)) {
 	    // Frage nach Reihenfolge Linklisten vs Personen
@@ -1048,9 +1106,13 @@ function fau_do_metabox_page_sidebar( $object, $box ) {
 	    $sidebar_title_below = get_post_meta( $object->ID, 'sidebar_title_below', true );
 	    fau_form_text('sidebar_title_below', $sidebar_title_below, __('Titel unten','fau'), __('Titel am Ende der Sidebar','fau'));
 	}
-	$sidebar_text_below = get_post_meta( $object->ID, 'sidebar_text_below', true );
- 	fau_form_wpeditor('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), __('Text am Ende der Sidebar','fau'),true);	    
-	    
+ 
+	$sidebar_text_below = get_post_meta( $object->ID, 'sidebar_text_below', true );	
+	if ($options['advanced_page_sidebar_useeditor_textbelow']) {
+	    fau_form_wpeditor('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), __('Text am Ende der Sidebar','fau'),true);
+	} else {
+	    fau_form_textarea('sidebar_text_below', $sidebar_text_below, __('Textbereich unten','fau'), $cols=50, $rows=5, __('Text am Ende der Sidebar','fau')); 
+	}		    
 	    
 
 	return;

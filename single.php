@@ -22,7 +22,15 @@ get_header(); ?>
 				<div class="span8">
 					
 					<article class="news-details">
-						<?php if ( has_post_thumbnail() && ! post_password_required() ) : ?>
+						<?php 
+						
+						$headline = get_post_meta( $post->ID, 'fauval_untertitel', true );				
+						if ( $headline) {
+						    echo '<h2 class="subtitle">'.$headline."</h2>\n";
+						}
+						
+						
+						if ( has_post_thumbnail() && ! post_password_required() ) : ?>
 							<div class="post-image">
 								<?php 
 								$bildunterschrift = get_post_meta( $post->ID, 'fauval_overwrite_thumbdesc', true );
@@ -79,7 +87,7 @@ get_header(); ?>
 						the_content();
 						
 						if ($options['post_display_category_below']) {
-						    $output = '<div>'."\n";
+						    $output = '<div class="meta-footer">'."\n";
 						    $output .= $typestr;
 						    $output .= '</div>'."\n";
 						    echo $output;   
@@ -88,7 +96,13 @@ get_header(); ?>
 					    
 						
 					</article>
-					
+					   <?php if ($options['advanced_activate_post_comments']) { ?>
+					 <div class="post-comments" id="comments"> 
+					    <?php 
+					    
+					    comments_template(); ?>
+					 </div>
+				    <?php } ?>
 				</div>
 				
 				<?php get_template_part('sidebar', 'news'); ?>

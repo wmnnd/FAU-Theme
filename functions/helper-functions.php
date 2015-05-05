@@ -386,7 +386,7 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 	    echo "<p>\n";
 	    echo '<label for="title_'.$rand.'_'.$name.'">'.__('Titel','fau');   
 	    echo "</label><br />\n";
-	    echo '<input type="text" class="large-text" name="'.$name.'_title" id="title_'.$rand.'_'.$name.'" value="'.$pretitle.'">';
+	    echo '<input type="text" class="large-text" name="'.$name.'_title" id="title_'.$rand.'_'.$name.'" value="'.$pretitle.'" placeholder="'.__('Nutze Titel der verlinkten Seite','fau').'">';
 	    echo "</p>\n";	    
 	    echo "<p>\n";
 	    echo '<label for="url_'.$rand.'_'.$name.'">'.__('URL','fau');  
@@ -397,27 +397,39 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 	    echo "</div>\n";
 	   
 	    ?>
-	   <script>
+	   <script>	
+	
 		var _link_sideload = false; 
 		var link_btn_<?php echo $name?> = (function($){
-		    var _link_sideload = false; 
+	 		    
+		    var link_sideload = false; 
+		    var link_val_container = $('#url_<?php echo $rand ?>_<?php echo $name ?>');
+		    var title_val_container = $('#title_<?php echo $rand ?>_<?php echo $name ?>');
+		    
 		    function _init() {
-			$('.link_button_<?php echo $name?>').on('click', function(event) {
-			    _addLinkListeners();
-			    _link_sideload = false;
-			    var link_val_container = $('#url_<?php echo $rand?>_<?php echo $name?>');
-			    window.wpActiveEditor = true;
-			    _link_sideload = true;
-			    wpLink.open();
-			    wpLink.textarea = $(link_val_container);
-			    return false;
-			});
+			$('.link_button_<?php echo $name ?>').on('click', function (event) {
+                            _addLinkListeners();
+                            _link_sideload = false;
+                            
+                          
+                            if ( typeof wpActiveEditor != 'undefined') {
+                                wpLink.open();
+                                wpLink.textarea = $(link_val_container);
+                            } else {
+                                window.wpActiveEditor = true;
+                                _link_sideload = true;
+                                wpLink.open();
+                                wpLink.textarea = $(link_val_container);
+                            }
+                            return false;
+                        });
 		    }
 		    function _addLinkListeners() {
 			$('body').on('click', '#wp-link-submit', function(event) {
 			    var linkAtts = wpLink.getAttrs();
 			    $('#url_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.href);
 			    $('#title_<?php echo $rand?>_<?php echo $name?>').val(linkAtts.title);
+			   
 			    _removeLinkListeners();
 			    return false;
 			});
@@ -427,6 +439,8 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			});
 		    }
 
+
+
 		    function _removeLinkListeners() {
 			if(_link_sideload){
 			    if ( typeof wpActiveEditor != 'undefined') {
@@ -435,6 +449,7 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 			}
 			wpLink.close();
 			wpLink.textarea = $('html');//focus on document
+			title_val_container.focus();
 			$('body').off('click', '#wp-link-submit');
 			$('body').off('click', '#wp-link-cancel');
 		    }
@@ -443,21 +458,51 @@ if ( ! function_exists( 'fau_form_link' ) ) :
 		    };
 		    })(jQuery);
 	   
-	    jQuery(document).ready(function($) {	 
+	    jQuery(document).ready(function($) {
+	   
 		 link_btn_<?php echo $name?>.init();
 	    });
 	  
 	   </script> 		    	    
-	   <?php 
-        
+	   <?php   
 	 echo "</div>\n";
 	
+	add_action( 'admin_footer-post-new.php', 'fau_wpLinkUpdate_getAttr', 9999 );
+	add_action( 'admin_footer-post.php',     'fau_wpLinkUpdate_getAttr', 9999 );
+	 
 	} else {
 	    echo _('Ungültiger Aufruf von fau_form_link() - Name oder Label fehlt.', 'fau');
 	}
     }
  endif;
+if ( ! function_exists( 'fau_wpLinkUpdate_getAttr' ) ) :  
+
+function fau_wpLinkUpdate_getAttr() {
+     ?>
+    <script type="text/javascript">
+        ( function( $ ) {
+            var  inputs = {};
+	    
+            if ( typeof wpLink == 'undefined' )
+                return;
+
+            // Override the function
+            wpLink.getAttrs= function () { 
+		inputs.url = $( '#wp-link-url' );
+		inputs.text = $( '#wp-link-text' );
+		inputs.openInNewTab = $( '#wp-link-target' );
+		return {
+    		    title: $.trim( inputs.text.val() ),
+                    href: $.trim( inputs.url.val() ),
+                    target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : ''
+               };
+            };
+        } )( jQuery );
+    </script>
+   <?php
+}
     
+endif;    
 
 if ( ! function_exists( 'fau_save_standard' ) ) :  
     function fau_save_standard($name, $val, $post_id, $post_type, $type='text') {
@@ -499,3 +544,48 @@ if ( ! function_exists( 'fau_san' ) ) :
 	return filter_var(trim($s), FILTER_SANITIZE_STRING);
     }
 endif;    
+
+
+if ( ! function_exists( 'fau_get_image_attributs' ) ) :
+    function fau_get_image_attributs($id=0) {
+        $precopyright = __('Bild:','fau').' ';
+        if ($id==0) return;
+        
+        $meta = get_post_meta( $id );
+        if (!isset($meta)) {
+         return;
+        }
+        $result = array();
+	if (isset($meta['_wp_attachment_image_alt'][0])) {
+	    $result['alt'] = trim(strip_tags($meta['_wp_attachment_image_alt'][0]));
+	} else {
+	    $result['alt'] = "";
+	}       
+        if (isset($meta['_wp_attachment_metadata']) && is_array($meta['_wp_attachment_metadata'])) {        
+         $data = unserialize($meta['_wp_attachment_metadata'][0]);
+         if (isset($data['image_meta']) && is_array($data['image_meta']) && isset($data['image_meta']['copyright'])) {
+                $result['copyright'] = trim(strip_tags($data['image_meta']['copyright']));
+         }
+        }
+        $attachment = get_post($id);
+        $result['beschriftung'] = $result['beschreibung'] = $result['title'] = '';
+        if (isset($attachment) ) {
+	    if (isset($attachment->post_excerpt)) {
+		$result['beschriftung'] = trim(strip_tags( $attachment->post_excerpt ));
+	    }
+	    if (isset($attachment->post_content)) {
+		$result['beschreibung'] = trim(strip_tags( $attachment->post_content ));
+	    }        
+	    if (isset($attachment->post_title)) {
+		 $result['title'] = trim(strip_tags( $attachment->post_title )); // Finally, use the title
+	    }   
+        }
+        
+        $displayinfo = $result['beschriftung'];
+        if (empty($displayinfo) && !empty($result['copyright'])) $displayinfo = $precopyright.$result['copyright'];
+        if (empty($displayinfo)) $displayinfo = $result['alt'];
+        $result['credits'] = $displayinfo;
+        return $result;
+                
+    }
+endif;

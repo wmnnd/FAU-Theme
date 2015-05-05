@@ -63,9 +63,9 @@ $defaultoptions = array(
     'default_postthumb_crop'	    => false,
    
      /* Thumb for Posts, displayed in post/page single display - Name: post */
-    'default_postthumb_width'	    => 300,
-    'default_postthumb_height'	    => 200,
-    'default_postthumb_crop'	    => false, 
+    'default_post_width'	    => 300,
+    'default_post_height'	    => 200,
+    'default_post_crop'	    => false, 
     
      /* Thumb for person-type; small for sidebar - Name: person-thumb */
     'default_person_thumb_width'    => 60,
@@ -153,6 +153,8 @@ $defaultoptions = array(
     'title_hero_search'		    =>  __( 'Suche', 'fau' ),
     'title_hero_events'		    =>  __( 'Veranstaltungskalender','fau'),
     
+    'advanced_post_active_subtitle'	=> true,
+  
     'advanced_beitragsoptionen'		=> true,
     'advanced_topevent'			=> true,
     'advanced_activateads'		=> true,
@@ -161,6 +163,9 @@ $defaultoptions = array(
     
     'advanced_page_sidebar_titleabove'	=> true,
     'advanced_page_sidebar_titlebelow'	=> true,    
+    'advanced_page_sidebar_useeditor_textabove'	=> false,
+    'advanced_page_sidebar_useeditor_textbelow'	=> false,
+    
     'advanced_page_sidebar_personen_title'	=> __('Kontakt','fau'), 
     'advanced_page_sidebar_linkblock1_number'	=> 3, 
     'advanced_page_sidebar_linkblock2_number'	=> 3,
@@ -169,14 +174,26 @@ $defaultoptions = array(
     'advanced_page_sidebar_order_personlinks'	=> 0,
 	// 0 = Kontakte, Links
 	// 1 = Links, Kontakte
+    'advanced_activate_post_comments'	=> false,
+    'advanced_comments_notes_before'	    => __( 'Ihre E-Mail-Adresse wird nicht angezeigt. Verpflichtende Felder werden mit dem folgenden Zeichen markiert: <span class="required">*</span>', 'fau' ),
+    'advanced_comments_disclaimer'          => __('Hinweis: Die Kommentare wurden von Lesern geschrieben und spiegeln deren persönliche Meinung wieder. Sie müssen nicht die Meinung der Universität oder der Fakultät repräsentieren.', 'fau' ),
+    'advanced_comments_avatar'		    => false,
     
+
+
     'post_display_category_below'	=> true,
     'search_display_post_thumbnails'	=> true,
     'search_display_post_cats'		=> true,
     'search_display_continue_arrow'		=> true,
     'search_display_excerpt_morestring'		=> '...',
     
-
+    
+    'plugin_fau_person_headline'	=> true,
+    'plugin_fau_person_malethumb'	=> get_template_directory_uri().'/img/platzhalter-mann.png',
+    'plugin_fau_person_femalethumb'	=> get_template_directory_uri().'/img/platzhalter-frau.png',
+    
+    'index_synonym_listall'		=> true,
+    'index_glossary_listall'		=> true,
      
 ); 
 
@@ -845,6 +862,16 @@ $setoptions = array(
               ),   
 	       
 	       
+	      'advanced_post_active_subtitle'	=> array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Untertitel (Beiträge)', 'fau' ),
+                  'label'   => __( 'Erlaube die Eingabe von Untertitel bei Beiträgen.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_post_active_subtitle'],
+		  'parent'  => 'bedienung'
+              ),   
+	       
+	       
+	       
 	       
 	      'design'  => array(
                   'type'    => 'section',
@@ -876,6 +903,25 @@ $setoptions = array(
                   'default' => $defaultoptions['advanced_page_sidebar_titlebelow'],
 		  'parent'  => 'sidebaropt'
               ), 
+	       
+	        'advanced_page_sidebar_useeditor_textabove'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'WYSIWYG-Editor Text unten', 'fau' ),
+                  'label'   => __( 'Erlaubt die Nutzung des WYSWYG-Editors für die Eingabe von Text in der Sitebar. Dies schließt auch HTML-Tags mit Bildern und Links ein. Andernfalls ist nur ein Text mit Absätzen möglich.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_page_sidebar_useeditor_textabove'],
+		  'parent'  => 'sidebaropt'
+              ), 
+	    'advanced_page_sidebar_useeditor_textbelow'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'WYSIWYG-Editor Text unten', 'fau' ),
+                  'label'   => __('Erlaubt die Nutzung des WYSWYG-Editors für die Eingabe von Text in der Sitebar. Dies schließt auch HTML-Tags mit Bildern und Links ein. Andernfalls ist nur ein Text mit Absätzen möglich.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_page_sidebar_useeditor_textbelow'],
+		  'parent'  => 'sidebaropt'
+              ), 
+	       
+	       
+	       
+	       
 		'advanced_page_sidebar_personen_title'	  => array(
                   'type'    => 'text',
                   'title'   => __( 'Default Titel über Kontakte', 'fau' ),
@@ -913,9 +959,35 @@ $setoptions = array(
 		  'parent'  => 'sidebaropt'
 		), 
 	       
-
-
+	'kommentare'  => array(
+                  'type'    => 'section',
+                  'title'   => __( 'Kommentare', 'fau' ),                      
+		),
+	       'advanced_activate_post_comments'		  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Kommentarfunktion aktivieren', 'fau' ),
+                  'label'   => __( 'Schaltet die Kommentarfunktion für Beiträge ein.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_activate_post_comments'],
+		  'parent'  => 'kommentare'
+		), 
+	        'advanced_comments_notes_before'	  => array(
+                  'type'    => 'text',
+                  'title'   => __( 'Hinweistext Eingabeformular', 'fau' ),
+                  'label'   => __( 'Informationen über den Eingabefeldern für neue Kommentare.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_comments_notes_before'],
+		  'parent'  => 'kommentare'
+		), 
+	        'advanced_comments_disclaimer'	  => array(
+                  'type'    => 'text',
+                  'title'   => __( 'Kommentar-Disclaimer', 'fau' ),
+                  'label'   => __( 'Hinweistext zur Abgrenzung zum Inhalt der Kommentare.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_comments_disclaimer'],
+		  'parent'  => 'kommentare'
+		), 
 	       
+  
+	       
+	       	       
 	       
 	       
 	       
