@@ -104,4 +104,6 @@ $posttype = get_post_type();
 	</section>
 
 
-<?php get_footer(); ?>
+<?php 
+get_footer();
+
