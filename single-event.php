@@ -43,20 +43,28 @@ function event_single_view(&$event) {
             <div class="event-date-day">
                 <?php echo $event->start_day_html ?>
             </div>
-        </div>                          
+        </div>
         <div class="event-info event-id-<?php echo $event->post_id ?> <?php if( $event->allday ) echo 'event-allday'; ?>">
-            <?php if( $event->allday ) : ?>
+            <?php if( $event->allday && !$event->multiday ) : ?>
             <div class="event-allday" style="text-transform: uppercase;">
                 <?php _e( 'Ganztägig', EVENT_TEXTDOMAIN ); ?>
             </div>
+            <?php elseif( $event->allday && $event->multiday ) : ?>
+            <div class="event-time">
+                <?php echo esc_html( sprintf( __( '%1$s bis %2$s', 'fau' ), $event->long_start_date, $event->long_end_date ) ) ?>
+            </div>            
+            <?php elseif( !$event->allday && $event->multiday ) : ?>
+            <div class="event-time">
+                <?php echo esc_html( sprintf( __( '%1$s bis %2$s', 'fau' ), $event->long_start_time, $event->long_end_time ) ) ?>
+            </div>
             <?php else: ?>
             <div class="event-time">
-                <?php echo esc_html( sprintf( __( '%s Uhr bis %s Uhr', 'fau' ), $event->start_time, $event->end_time ) ) ?>
-            </div>
+                <?php echo esc_html( sprintf( __( '%1$s Uhr bis %2$s Uhr', 'fau' ), $event->short_start_time, $event->short_end_time ) ) ?>
+            </div>            
             <?php endif; ?>
             <?php $location = $location ? $location : '&nbsp;'; ?>
             <div class="event-location"><?php echo $location ?></div>
-        </div>        
+        </div>
     </div>
     <?php
 }
