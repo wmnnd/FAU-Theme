@@ -255,17 +255,14 @@ if ( ! function_exists( 'fau_glossary' ) ) :
 
 		$current = "A";
 		$letters = array();
-		$umlaute = array('Ä' => 'A', 'Ö' => 'O', 'Ü' => 'U');
 
 		$accordion = '<div class="accordion">'."\n";
 
 		$i = 0;
 		foreach($posts as $post) {
-			$letter = get_the_title($post->ID);
+			$letter = remove_accents(get_the_title($post->ID));
 			$letter = mb_substr($letter, 0, 1);
 			$letter = mb_strtoupper($letter, 'UTF-8');
-			
-			if(isset($umlaute[$letter])) $letter = $umlaute[$letter];
 			
 			if($i == 0 || $letter != $current) {
 				$accordion .= '<h2 id="letter-'.$letter.'">'.$letter.'</h2>'."\n";
@@ -371,17 +368,14 @@ if ( ! function_exists( 'fau_get_glossar' ) ) :
 
 		$current = "A";
 		$letters = array();
-		$umlaute = array('Ä' => 'A', 'Ö' => 'O', 'Ü' => 'U');
 
 		$accordion = '<div class="accordion">'."\n";
 
 		$i = 0;
 		foreach($posts as $post) {
-			$letter = get_the_title($post->ID);
+			$letter = remove_accents(get_the_title($post->ID));
 			$letter = mb_substr($letter, 0, 1);
 			$letter = mb_strtoupper($letter, 'UTF-8');
-			
-			if(isset($umlaute[$letter])) $letter = $umlaute[$letter];
 			
 			if($i == 0 || $letter != $current) {
 				$accordion .= '<h2 id="letter-'.$letter.'">'.$letter.'</h2>'."\n";
