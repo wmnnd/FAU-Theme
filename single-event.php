@@ -1,12 +1,5 @@
 <?php
 
-$content = '';
-if (defined('EVENT_POST_TYPE') && get_post_type() == EVENT_POST_TYPE) {
-    global $event_events_helper;
-
-    $event = $event_events_helper->get_event(get_the_ID());
-    $content = event_get_view($event, $content);
-}
 
 function event_get_view(&$event, &$content) {
     ob_start();
@@ -81,7 +74,17 @@ get_header(); ?>
             <div class="row">
                 <div class="span8">
                      
-                    <?php echo $content; ?>
+                    <?php 
+		    $content = '';
+		    if (defined('EVENT_POST_TYPE') && get_post_type() == EVENT_POST_TYPE) {
+			global $event_events_helper;
+
+			$event = $event_events_helper->get_event(get_the_ID());
+			$content = event_get_view($event, $content);
+		    }
+
+		    
+		    echo $content; ?>
                     <div>
                     <?php the_content(); ?>
                     </div>
