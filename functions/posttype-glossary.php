@@ -211,7 +211,7 @@ if ( ! function_exists( 'fau_glossary' ) ) :
 	    
 	    if (isset($id) && intval($id)>0) {
 		$title = get_the_title($id);
-		$letter = get_the_title($id);
+		$letter = remove_accents(get_the_title($id));
 		$letter = mb_substr($letter, 0, 1);
 		$letter = mb_strtoupper($letter, 'UTF-8');
 		$content = apply_filters( 'the_content',  get_post_field('post_content',$id) );
@@ -322,7 +322,7 @@ if ( ! function_exists( 'fau_get_glossar' ) ) :
 
 	    if (isset($id) && intval($id)>0) {
 		$title = get_the_title($id);
-		$letter = get_the_title($id);
+		$letter = remove_accents(get_the_title($id));
 		$letter = mb_substr($letter, 0, 1);
 		$letter = mb_strtoupper($letter, 'UTF-8');
 		$content = apply_filters( 'the_content',  get_post_field('post_content',$id) );
