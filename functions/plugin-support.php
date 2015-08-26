@@ -97,7 +97,7 @@
 				<?php $cat = get_the_terms($event->post_id, 'event_category'); ?>
 				<li class="<?php foreach ($cat as $c) : echo ' event-category-' . $c->slug; endforeach; ?><?php if (isset($date_info['today']) && $date_info['today']) echo ' event-today'; ?>">
 				    <div class="event-date"><div class="event-date-month"><?php echo date_i18n('M', $timestamp, TRUE); ?></div><div class="event-date-day"><?php echo date_i18n('d', $timestamp, TRUE); ?></div></div>                          
-				    <div class="event-info event-id-<?php echo $event->post_id; ?><?php if ($event->allday) : echo 'event-allday'; endif; ?>"><?php if (!$event->allday): ?><div class="event-time"><?php echo esc_html(sprintf(__('%s Uhr bis %s Uhr', 'fau'), $event->start_time, $event->end_time)) ?></div><?php endif; ?>
+				    <div class="event-info event-id-<?php echo $event->post_id; ?><?php if ($event->allday) : echo ' event-allday'; endif; ?>"><div class="event-time"><?php echo $event->allday ?  __('Ganztägig', 'fau') : esc_html(sprintf(__('%s Uhr bis %s Uhr', 'fau'), $event->start_time, $event->end_time)); ?></div>
 				    <div class="event-title"><a href="<?php echo esc_attr(get_permalink($event->post_id)); ?>"><?php echo esc_html(apply_filters('the_title', $event->post->post_title)); ?></a></div>
 				    <div class="event-location"><?php if (!empty($event->venue)): ?><?php echo sprintf(__('%s', 'fau'), $event->venue); ?><?php endif; ?></div></div>
 				</li>
