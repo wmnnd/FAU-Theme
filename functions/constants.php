@@ -195,6 +195,8 @@ $defaultoptions = array(
     'index_synonym_listall'		=> true,
     'index_glossary_listall'		=> true,
      
+    'advanced_reveal_pages_id'		=> true,
+    
 ); 
 
 
@@ -870,7 +872,13 @@ $setoptions = array(
 		  'parent'  => 'bedienung'
               ),   
 	       
-	       
+	       'advanced_reveal_pages_id'	=> array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Zeige Seiten-Ids', 'fau' ),
+                  'label'   => __( 'In der Übersicht der Seiten werden die Ids angezeigt.', 'fau' ),                
+                  'default' => $defaultoptions['advanced_reveal_pages_id'],
+		  'parent'  => 'bedienung'
+              ),  
 	       
 	       
 	      'design'  => array(
