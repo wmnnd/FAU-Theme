@@ -15,14 +15,14 @@ $colorTextLight: #888;
 $colorNotice: 		#a71c18;
 
 // Define colors of each faculty
-$colorPhilFak: 	#ad841f;
-$colorRwFak: 	#801429;
-$colorMedFak: 	#00b1c6;
-$colorNatFak:	#009775;
-$colorTechFak:	#a3acb2;
-$colorZUV:		#003366;
-$colorDefault:	$colorZUV;
-	    
+$colorPhilFak:	    #A36B0D;
+$colorRwFak:	    #8d1429;
+$colorMedFak:	    #0381A2;
+$colorNatFak:	    #048767;
+$colorTechFak:	    #6E7881;
+$colorZUV:	    #003366;
+$colorDefault:	    #003366;
+
 
 $colorPrimary:	$colorZUV;
 $colorHover: 	desaturate(lighten($colorPrimary, 10%), 40%);
