@@ -14,8 +14,9 @@ global $options;
 ?><!DOCTYPE html>
 <html class="no-js" <?php language_attributes(); ?>>
 <head>
-	<title><?php wp_title( '-', true, 'right' ); ?></title>
-	<?php wp_head(); ?>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title><?php wp_title( '-', true, 'right' ); ?></title>
+    <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>

@@ -244,7 +244,6 @@ function fau_addmetatags() {
 
     $output = "";
     $output .= '<meta http-equiv="Content-Type" content="text/html; charset='.get_bloginfo('charset').'" />'."\n";
-    $output .= '<!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=9"> <![endif]-->'."\n";
     $output .= '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";    
     
     // $output .= '<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">'."\n";    
