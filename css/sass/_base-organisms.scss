@@ -545,6 +545,18 @@ body.admin-bar.nav-fixed {
 			font-size: 18px;
 			max-width: 600px;
 		}
+		p.credits {
+		    background: $colorCopyrightBackground;
+		    color: $colorCopyright;
+		    font-size: 14px;
+		    line-height: 18px;
+		    position: absolute;
+		    bottom: 0;
+		    right: 0;
+		    z-index: 6;
+		    margin: 0;
+		    padding: 1px 4px;
+		}
 		
 	}
 	

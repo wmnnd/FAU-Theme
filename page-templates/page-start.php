@@ -48,14 +48,19 @@ global $options;
 			    <?php 
 			    
 			    $sliderimage = '';
+			    $copyright = '';
 			   // $imageid = get_post_meta( $hero->ID, 'fauval_sliderid', true );
 			    $imageid = get_post_meta( $hero->ID, 'fauval_slider_image', true );
 			    if (isset($imageid) && ($imageid>0)) {
 				$sliderimage = wp_get_attachment_image_src($imageid, 'hero'); 
+				$imgdata = fau_get_image_attributs($imageid);
+				$copyright = trim(strip_tags( $imgdata['credits'] ));
 			    } else {
 				$post_thumbnail_id = get_post_thumbnail_id( $hero->ID ); 
 				if ($post_thumbnail_id) {
 				    $sliderimage = wp_get_attachment_image_src( $post_thumbnail_id, 'hero' );
+				    $imgdata = fau_get_image_attributs($post_thumbnail_id);
+				    $copyright = trim(strip_tags( $imgdata['credits'] ));
 				}
 			    }
 
@@ -65,6 +70,9 @@ global $options;
 				$slidersrc = '<img src="'.fau_esc_url($sliderimage[0]).'" width="'.$options['slider-image-width'].'" height="'.$options['slider-image-height'].'" alt="">';	
 			    }
 			    echo $slidersrc."\n"; 
+			    if (!empty($copyright)) {
+				echo '<p class="credits">'.$copyright."</p>";
+			    }
 			    ?>
 			    <div class="hero-slide-text">
 				<div class="container">

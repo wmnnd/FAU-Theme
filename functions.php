@@ -1448,3 +1448,54 @@ if ($options['advanced_reveal_pages_id']) {
     add_filter( 'manage_pages_columns', 'revealid_add_id_column', 5 );
     add_action( 'manage_pages_custom_column', 'revealid_id_column_content', 5, 2 );
 }
+
+
+if ( ! function_exists( 'fau_get_image_attributs' ) ) :
+    function fau_get_image_attributs($id=0) {
+        $precopyright = __('Bild:','fau').' ';
+        if ($id==0) return;
+        
+        $meta = get_post_meta( $id );
+        if (!isset($meta)) {
+         return;
+        }
+        $result = array();
+	if (isset($meta['_wp_attachment_image_alt'][0])) {
+	    $result['alt'] = trim(strip_tags($meta['_wp_attachment_image_alt'][0]));
+	} else {
+	    $result['alt'] = "";
+	}       
+        if (isset($meta['_wp_attachment_metadata']) && is_array($meta['_wp_attachment_metadata'])) {        
+         $data = unserialize($meta['_wp_attachment_metadata'][0]);
+         if (isset($data['image_meta']) && is_array($data['image_meta']) && isset($data['image_meta']['copyright'])) {
+                $result['copyright'] = trim(strip_tags($data['image_meta']['copyright']));
+         }
+	 if (isset($data['image_meta']) && is_array($data['image_meta']) && isset($data['image_meta']['credit'])) {
+		$displayinfo = trim(strip_tags($data['image_meta']['credits']));
+	 }
+        }
+        $attachment = get_post($id);
+        $result['bildunterschrift'] = $result['beschreibung'] = $result['title'] = '';
+        if (isset($attachment) ) {
+	    if (isset($attachment->post_excerpt)) {
+		$result['bildunterschrift'] = trim(strip_tags( $attachment->post_excerpt ));
+	    }
+	    if (isset($attachment->post_content)) {
+		$result['beschreibung'] = trim(strip_tags( $attachment->post_content ));
+	    }        
+	    if (isset($attachment->post_title)) {
+		 $result['title'] = trim(strip_tags( $attachment->post_title )); 
+	    }   
+        }
+        
+	
+	
+        if ((empty($displayinfo)) && (!empty($result['copyright']))) $displayinfo = $precopyright.' '.$result['copyright'];	
+	if (empty($displayinfo)) $displayinfo = $result['beschreibung'];
+	if (empty($displayinfo)) $displayinfo = $result['bildunterschrift'];
+        if (empty($displayinfo)) $displayinfo = $result['alt'];
+        $result['credits'] = $displayinfo;
+        return $result;
+                
+    }
+endif;
