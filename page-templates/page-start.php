@@ -51,6 +51,7 @@ global $options;
 			    $copyright = '';
 			   // $imageid = get_post_meta( $hero->ID, 'fauval_sliderid', true );
 			    $imageid = get_post_meta( $hero->ID, 'fauval_slider_image', true );
+			   	
 			    if (isset($imageid) && ($imageid>0)) {
 				$sliderimage = wp_get_attachment_image_src($imageid, 'hero'); 
 				$imgdata = fau_get_image_attributs($imageid);
@@ -60,7 +61,7 @@ global $options;
 				if ($post_thumbnail_id) {
 				    $sliderimage = wp_get_attachment_image_src( $post_thumbnail_id, 'hero' );
 				    $imgdata = fau_get_image_attributs($post_thumbnail_id);
-				    $copyright = trim(strip_tags( $imgdata['credits'] ));
+				    $copyright =  $imgdata['credits'];
 				}
 			    }
 
@@ -70,7 +71,8 @@ global $options;
 				$slidersrc = '<img src="'.fau_esc_url($sliderimage[0]).'" width="'.$options['slider-image-width'].'" height="'.$options['slider-image-height'].'" alt="">';	
 			    }
 			    echo $slidersrc."\n"; 
-			    if (!empty($copyright)) {
+			    
+			    if (($options['advanced_display_hero_credits']==true) && (!empty($copyright))) {
 				echo '<p class="credits">'.$copyright."</p>";
 			    }
 			    ?>
@@ -96,7 +98,10 @@ global $options;
 						<br><p><?php echo $abstract; ?></p>
 				</div>
 			    </div>
-		    <script type="text/javascript">
+		    
+		    </div>
+	    <?php endforeach; ?> 
+	    <script type="text/javascript">
 			jQuery(document).ready(function($) {
 			$('#hero-slides').flexslider({
 				selector: '.hero-slide',
@@ -105,10 +110,7 @@ global $options;
 			});
 		    });
 		    </script>
-		    </div>
-	    <?php endforeach; 
-              wp_reset_query();
-	      ?>
+	    <?php  wp_reset_query();  ?>
 		
 		</div>
 	
