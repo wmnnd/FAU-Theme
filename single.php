@@ -57,8 +57,6 @@ get_header(); ?>
 									}
 									
 									
-									
-									
 									if (  (!empty($info)) || (!empty($credits)) ) {
 									    echo '<div class="post-image-caption">';
 									    
