@@ -5,7 +5,7 @@
  */
 $defaultoptions = array(
     'js-version'		    => '1.5',
-    'optionpage-tab-default'	    => 'startseite',
+    'optionpage-tab-default'	    => 'website',
     'content-width'		    => 770,
     'src-fallback-slider-image'	    => get_template_directory_uri().'/img/slider-fallback.jpg',
     'slider-category'		    => 'header',
@@ -196,8 +196,9 @@ $defaultoptions = array(
     'index_glossary_listall'		=> true,
      
     'advanced_reveal_pages_id'		=> true,
-    'advanced_images_info_credits'	=> 'iptc',
+    'advanced_images_info_credits'	=> 0,
     'advanced_display_hero_credits'	=> true,
+    'advanced_display_postthumb_credits'    => true,
 ); 
 
 
@@ -780,12 +781,12 @@ $setoptions = array(
 		), 
           )
        ),
-       'contact'   => array(
+       'website'   => array(
            'tabtitle'   => __('Kontaktdaten', 'fau'),
            'fields' => array(
                'pubadresse'  => array(
                   'type'    => 'section',
-                  'title'   => __( 'Öffemtliche Adresse im Fußteil', 'fau' ),                      
+                  'title'   => __( 'Öffentliche Adresse im Fußteil', 'fau' ),                      
               ),
               'contact_address_name' => array(
                   'type'    => 'text',
@@ -902,9 +903,16 @@ $setoptions = array(
       	       
 	       'advanced_display_hero_credits'	  => array(
                   'type'    => 'bool',
-                  'title'   => __( 'Copyright-Hinweis', 'fau' ),
-                  'label'   => __( 'Auf der Startseite wird im Slider der Copyright-Hinweis des Bildes angezeigt, wenn vorhanden', 'fau' ),                
+                  'title'   => __( 'Copyright-Hinweis Startseite', 'fau' ),
+                  'label'   => __( 'Auf der Startseite wird im Slider und im Banner der Copyright-Hinweis des Bildes angezeigt, wenn vorhanden', 'fau' ),                
                   'default' => $defaultoptions['advanced_display_hero_credits'],
+		  'parent'  => 'design'
+              ),  
+	        'advanced_display_postthumb_credits'	  => array(
+                  'type'    => 'bool',
+                  'title'   => __( 'Copyright-Hinweis Beiträge', 'fau' ),
+                  'label'   => __( 'In Beiträgen wird das Artikelbild mit einem Copyright-Hinweis des Bildes versehen, wenn vorhanden', 'fau' ),                
+                  'default' => $defaultoptions['advanced_display_postthumb_credits'],
 		  'parent'  => 'design'
               ),  
 	       
