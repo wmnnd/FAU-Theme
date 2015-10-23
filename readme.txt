@@ -15,6 +15,7 @@ AUTHOR
 
    RRZE-Webteam , http://www.rrze.fau.de
    Agentur Medienreaktor, http://www.medienreaktor.de/
+   vanbittern – Philipp Schmieder Medien, https://vanbittern.com
 
 
 CREDITS & COPYRIGHT
