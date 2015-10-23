@@ -273,5 +273,30 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		$('body').removeClass('menu-toggled')
 	});
+
+
+	//Move hero navigation to footer
+	if ($('body').hasClass('page-template-page-start')) {
+		jQuery('#hero > .container').addClass('hero-navigation hero-navigation-top');
+
+		var updateResponsivePositioning = function() {
+			var width = $(window).width();
+			var heroNavigation = $('.hero-navigation');
+			if (width > 750 && !heroNavigation.hasClass('hero-navigation-top')) {
+				heroNavigation.appendTo('#hero');
+				heroNavigation.addClass('hero-navigation-top');
+			} else if (width <= 750 && heroNavigation.hasClass('hero-navigation-top')) {
+				heroNavigation.prependTo('#footer');
+				heroNavigation.removeClass('hero-navigation-top');
+			}
+		};
+
+		updateResponsivePositioning();
+
+		$(window).on('resize', function() {
+			updateResponsivePositioning();
+		});
+	}
+
 }
 );

@@ -96,3 +96,14 @@
 		text-decoration: underline;
 	};
 }
+
+
+#footer .hero-navigation {
+	&>*, h1, h2, h3 {
+		color: #fff;
+	}
+}
+
+#footer .hero-navigation {
+	margin-bottom: 50px;
+}
