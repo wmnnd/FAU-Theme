@@ -50,9 +50,9 @@ jQuery(document).ready(function($) {
 	// Mobile navigation toggle
 	$('#nav-toggle').bind('click', function(event) {
 		event.preventDefault();
-		$('#nav').toggleClass('toggled');
+		$('body').toggleClass('menu-toggled');
 	});
-	
+
 	// Set jumplinks
 	$('.jumplinks a').bind('click', function(event) {
 		event.preventDefault();
@@ -246,5 +246,32 @@ jQuery(document).ready(function($) {
 		$(this).closest('.has-sub').children('ul').slideToggle();
 	});
 
+
+	// Off-canvas navigation
+	var navContainer = $('<div id="off-canvas">');
+	var nav = $('#nav').clone();
+	var navCloseLabel = $('<a id="off-canvas-close" href="#"><span>Menü schließen</span> <i class="fa fa-times"></i></a>')
+
+	if ($('html').attr('lang') !== 'de-DE-formal') {
+		$('span', navCloseLabel).text('Close menu');
+	}
+
+	navCloseLabel.appendTo(navContainer);
+	nav.appendTo(navContainer);
+	navContainer.appendTo('body');
+	$('<div id="off-canvas-overlay">').appendTo('body');
+
+	nav.on('click', '.menu-item.level1', function(e) {
+		e.preventDefault();
+		if (!$(this).hasClass('focus')) {
+			$('#off-canvas .menu-item.level1').removeClass('focus');
+		}
+		$(this).toggleClass('focus');
+	});
+
+	$('#off-canvas-overlay, #off-canvas-close').on('click', function(e) {
+		e.preventDefault();
+		$('body').removeClass('menu-toggled')
+	});
 }
 );
