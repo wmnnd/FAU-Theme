@@ -262,11 +262,13 @@ jQuery(document).ready(function($) {
 	$('<div id="off-canvas-overlay">').appendTo('body');
 
 	nav.on('click', '.menu-item.level1', function(e) {
-		e.preventDefault();
-		if (!$(this).hasClass('focus')) {
-			$('#off-canvas .menu-item.level1').removeClass('focus');
+		if ($(e.target).parent().hasClass('level1')) {
+			e.preventDefault();
+			if (!$(this).hasClass('focus')) {
+				$('#off-canvas .menu-item.level1').removeClass('focus');
+			}
+			$(this).toggleClass('focus');
 		}
-		$(this).toggleClass('focus');
 	});
 
 	$('#off-canvas-overlay, #off-canvas-close').on('click', function(e) {
