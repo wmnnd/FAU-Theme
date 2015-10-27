@@ -279,17 +279,22 @@ jQuery(document).ready(function($) {
 
 	//Move hero navigation to footer
 	if ($('body').hasClass('page-template-page-start')) {
-		jQuery('#hero > .container').addClass('hero-navigation hero-navigation-top');
+		$('body').addClass('responsive-large');
+		$('#hero > .container').addClass('hero-navigation');
 
 		var updateResponsivePositioning = function() {
 			var width = $(window).width();
+			var body = $('body');
 			var heroNavigation = $('.hero-navigation');
-			if (width > 750 && !heroNavigation.hasClass('hero-navigation-top')) {
+			var header = $('#header');
+			if (width > 750 && !body.hasClass('responsive-large')) {
+				body.addClass('responsive-large');
 				heroNavigation.appendTo('#hero');
-				heroNavigation.addClass('hero-navigation-top');
-			} else if (width <= 750 && heroNavigation.hasClass('hero-navigation-top')) {
+				header.insertAfter('#meta');
+			} else if (width <= 750 && body.hasClass('responsive-large')) {
+				body.removeClass('responsive-large');
 				heroNavigation.prependTo('#footer');
-				heroNavigation.removeClass('hero-navigation-top');
+				header.prependTo('body');
 			}
 		};
 

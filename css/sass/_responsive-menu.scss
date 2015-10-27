@@ -4,8 +4,8 @@
 
 @media (max-width: $breakMD) {
 
-	body {
-		padding-top: 0;
+	body, body.nav-fixed {
+		padding-top: 80px;
 	}
 
 	#off-canvas, #off-canvas-overlay {
