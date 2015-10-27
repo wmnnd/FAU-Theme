@@ -287,14 +287,17 @@ jQuery(document).ready(function($) {
 			var body = $('body');
 			var heroNavigation = $('.hero-navigation');
 			var header = $('#header');
+			var metaNav = $('#meta-nav');
 			if (width > 750 && !body.hasClass('responsive-large')) {
 				body.addClass('responsive-large');
 				heroNavigation.appendTo('#hero');
 				header.insertAfter('#meta');
+				metaNav.appendTo('#meta .container .pull-left');
 			} else if (width <= 750 && body.hasClass('responsive-large')) {
 				body.removeClass('responsive-large');
 				heroNavigation.prependTo('#footer');
 				header.prependTo('body');
+				metaNav.appendTo('#off-canvas');
 			}
 		};
 

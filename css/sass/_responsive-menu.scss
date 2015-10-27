@@ -12,7 +12,6 @@
 		display: block;
 	}
 
-
 	#off-canvas {
 		position: fixed;
 		width: 250px;
@@ -106,6 +105,22 @@
 		&:hover {
 			text-decoration: underline;
 		};
+	}
+
+	ul#meta-nav {
+		display: block;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		background: $colorLightest;
+
+		li {
+			display: block;
+
+			a {
+				display: block;
+				padding: 10px 20px;
+			}
+		}
 	}
 
 	#footer .hero-navigation {
