@@ -246,6 +246,9 @@ jQuery(document).ready(function($) {
 		$(this).closest('.has-sub').children('ul').slideToggle();
 	});
 
+	//Add JS-enabled class to body
+	$('body').addClass('js-enabled');
+
 
 	// Off-canvas navigation
 	var navContainer = $('<div id="off-canvas">');
