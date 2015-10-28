@@ -284,6 +284,8 @@ jQuery(document).ready(function($) {
 	$('body').addClass('responsive-large');
 	if ($('body').hasClass('page-template-page-start')) {
 		$('#hero > .container').addClass('hero-navigation');
+		$('.logos-menu span').addClass('logos-menu-logo');
+		$('#content > .container').eq(0).append('<div class="responsive-logos-container" />');
 	}
 
 	var updateResponsivePositioning = function() {
@@ -293,18 +295,22 @@ jQuery(document).ready(function($) {
 		var header = $('#header');
 		var metaNav = $('#meta-nav');
 		var subNav = $('#subnav').parent();
+		var logos = $('.logos-menu-logo');
+
 		if (width > 750 && !body.hasClass('responsive-large')) {
 			body.addClass('responsive-large');
 			heroNavigation.appendTo('#hero');
 			header.insertAfter('#meta');
 			metaNav.appendTo('#meta .container .pull-left');
 			subNav.prependTo('#content .row');
+			logos.appendTo('.logos-menu');
 		} else if (width <= 750 && body.hasClass('responsive-large')) {
 			body.removeClass('responsive-large');
 			heroNavigation.prependTo('#footer');
 			header.prependTo('body');
 			metaNav.appendTo('#off-canvas');
 			subNav.appendTo('#content .row');
+			logos.appendTo('.responsive-logos-container');
 		}
 	};
 
