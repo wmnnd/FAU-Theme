@@ -280,36 +280,36 @@ jQuery(document).ready(function($) {
 	});
 
 
-	//Move hero navigation to footer
+	//Update responsive positioning of some elements
+	$('body').addClass('responsive-large');
 	if ($('body').hasClass('page-template-page-start')) {
-		$('body').addClass('responsive-large');
 		$('#hero > .container').addClass('hero-navigation');
-
-		var updateResponsivePositioning = function() {
-			var width = $(window).width();
-			var body = $('body');
-			var heroNavigation = $('.hero-navigation');
-			var header = $('#header');
-			var metaNav = $('#meta-nav');
-			if (width > 750 && !body.hasClass('responsive-large')) {
-				body.addClass('responsive-large');
-				heroNavigation.appendTo('#hero');
-				header.insertAfter('#meta');
-				metaNav.appendTo('#meta .container .pull-left');
-			} else if (width <= 750 && body.hasClass('responsive-large')) {
-				body.removeClass('responsive-large');
-				heroNavigation.prependTo('#footer');
-				header.prependTo('body');
-				metaNav.appendTo('#off-canvas');
-			}
-		};
-
-		updateResponsivePositioning();
-
-		$(window).on('resize', function() {
-			updateResponsivePositioning();
-		});
 	}
+
+	var updateResponsivePositioning = function() {
+		var width = $(window).width();
+		var body = $('body');
+		var heroNavigation = $('.hero-navigation');
+		var header = $('#header');
+		var metaNav = $('#meta-nav');
+		if (width > 750 && !body.hasClass('responsive-large')) {
+			body.addClass('responsive-large');
+			heroNavigation.appendTo('#hero');
+			header.insertAfter('#meta');
+			metaNav.appendTo('#meta .container .pull-left');
+		} else if (width <= 750 && body.hasClass('responsive-large')) {
+			body.removeClass('responsive-large');
+			heroNavigation.prependTo('#footer');
+			header.prependTo('body');
+			metaNav.appendTo('#off-canvas');
+		}
+	};
+
+	updateResponsivePositioning();
+
+	$(window).on('resize', function() {
+		updateResponsivePositioning();
+	});
 
 }
 );
